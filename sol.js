@@ -45,7 +45,7 @@ class FileSystem {
 
         const pathToFile = path.split('/')
 
-        const newDocument = new Node(name, type, content.length, content)
+        const newDocument = new Node(name, type, JSON.stringify(content).length, content)
         newDocument.size = this.getEntitySize(newDocument, type)
 
         try {
