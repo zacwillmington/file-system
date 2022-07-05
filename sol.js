@@ -1,4 +1,7 @@
 
+/*
+ * This is a sudo code example with real javascript. I have not run this code, so there is probably bugs
+ */
 
 class Node {// class Entity a better name?
     constructor(name, type, size, content){
@@ -43,10 +46,10 @@ class FileSystem {
         const pathToFile = path.split('/')
 
         const newDocument = new Node(name, type, content.length, content)
-        newDocument.size = getEntitySize(newDocument, type)
+        newDocument.size = this.getEntitySize(newDocument, type)
 
         try {
-            move(null, path, newDocument)
+            this.move(null, path, newDocument)
         } catch (error) {
             throw Error(error)
         }
@@ -59,12 +62,16 @@ class FileSystem {
         let parent = this.root
         while (i < pathToFile.length) {
             for (const child of curNode.children) {
-                if (pathToFile[i] !== child.name) throw Error('Invalid path')
-                parent = curNode
-                curNode = child
-                i++
+                if (pathToFile[i] == child.name) {
+                    parent = curNode
+                    curNode = child
+                    i++
+                }
             }
         }
+        
+        // Check if we found the node by confirming its parent
+        if (pathToFile.length >= 2 && pathToFile[pathToFile.length - 2] != parent.name) throw new Error('Invalid path')
 
         return [curNode, parent]
     }
@@ -72,14 +79,14 @@ class FileSystem {
     move(from, to, node = null) {
         // If the node already exists
         if (!node) {
-            let [node, oldParent] = getNode(from)
+            let [node, oldParent] = this.getNode(from)
         }
         
-        const [newParent, _] = getNode(to)
+        const [newParent, _] = this.getNode(to)
 
         const namesOfDocumentsInDir = newParent.children.map((n) => n.name)
         if (namesOfDocumentsInDir.includes(node.name)) {
-            throw Error(node.name + ' already exist')
+            throw new Error(node.name + ' already exist')
         }
        
         if (newParent.type == TYPES.TXT) throw new Error('Cannot nest under a txt file')
@@ -90,21 +97,21 @@ class FileSystem {
 
         // Only delete the node if the node has been successfully moved 
          if (from) {
-            delete(oldParent, node)
+            this.delete(oldParent, node)
         }
         
     }
 
     writeToFile(path, content) {
-       const [node, _] = getNode(path)
+       const [node, _] = this.getNode(path)
 
         node.content = content 
-        node.size = getEntitySize(node, node.type)   
+        node.size = this.getEntitySize(node, node.type)   
     }
 
     delete(path) {
-        const [node, parent] = getNode(path)
-        deleteNode(parent, node)
+        const [node, parent] = this.getNode(path)
+        this.deleteNode(parent, node)
     }
 
     deleteNode(parent, node) {
