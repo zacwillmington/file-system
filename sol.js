@@ -1,6 +1,6 @@
 
 /*
- * This is a sudo code example with real javascript. I have not run this code, so there is probably bugs
+ * This is a pseudo code example with real javascript. I have not run this code, so there is probably bugs
  */
 
 class Node {// class Entity a better name?
