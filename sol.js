@@ -1,6 +1,6 @@
 
 
-class Node {
+class Node {// class Entity a better name?
     constructor(name, type, size, content){
         this.type = type
         this.content = content
